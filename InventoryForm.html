@@ -1,0 +1,2072 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+  <base target="_top">
+
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1">
+
+  <title>Automated Inventory Control System</title>
+
+
+  <style>
+
+    * {
+      box-sizing: border-box;
+    }
+
+
+    body {
+
+      margin: 0;
+
+      background: #f5f5f5;
+
+      font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+      color: #151515;
+
+    }
+
+
+    .container {
+
+      max-width: 1100px;
+
+      margin: 25px auto;
+
+      padding: 0 18px;
+
+    }
+
+
+    /* HEADER */
+
+    .header {
+
+      background: #111;
+
+      color: white;
+
+      padding: 25px 28px;
+
+      border-radius: 14px;
+
+      display: flex;
+
+      justify-content: space-between;
+
+      align-items: center;
+
+      gap: 20px;
+
+    }
+
+
+    .header h1 {
+
+      margin: 0;
+
+      font-size: 25px;
+
+    }
+
+
+    .header p {
+
+      margin: 7px 0 0;
+
+      color: #cfcfcf;
+
+      font-size: 14px;
+
+    }
+
+
+    .edit-button {
+
+      border: 1px solid #555;
+
+      background: white;
+
+      color: #111;
+
+      padding: 10px 18px;
+
+      border-radius: 8px;
+
+      font-weight: bold;
+
+      cursor: pointer;
+
+    }
+
+
+    .edit-button:hover {
+
+      background: #eaeaea;
+
+    }
+
+
+    /* PROFILE */
+
+    .profile {
+
+      background: white;
+
+      border-radius: 12px;
+
+      margin-top: 18px;
+
+      padding: 20px;
+
+      display: grid;
+
+      grid-template-columns:
+        1fr 1fr 1fr;
+
+      gap: 15px;
+
+      box-shadow:
+        0 2px 8px rgba(0,0,0,.05);
+
+    }
+
+
+    .profile-box {
+
+      background: #f6f6f6;
+
+      border-radius: 9px;
+
+      padding: 14px;
+
+    }
+
+
+    .profile-label {
+
+      color: #777;
+
+      font-size: 12px;
+
+      margin-bottom: 5px;
+
+    }
+
+
+    .profile-value {
+
+      font-weight: bold;
+
+      font-size: 16px;
+
+    }
+
+
+    /* CARDS */
+
+    .card {
+
+      background: white;
+
+      margin-top: 18px;
+
+      padding: 22px;
+
+      border-radius: 12px;
+
+      box-shadow:
+        0 2px 8px rgba(0,0,0,.05);
+
+    }
+
+
+    .card h2 {
+
+      margin-top: 0;
+
+      margin-bottom: 7px;
+
+      font-size: 20px;
+
+    }
+
+
+    .subtitle {
+
+      color: #777;
+
+      margin-top: 0;
+
+      margin-bottom: 20px;
+
+    }
+
+
+    /* ITEMS */
+
+    .item-grid {
+
+      display: grid;
+
+      grid-template-columns:
+        repeat(2, 1fr);
+
+      gap: 10px;
+
+    }
+
+
+    .item {
+
+      border: 1px solid #ddd;
+
+      border-radius: 9px;
+
+      padding: 14px;
+
+      transition: .15s;
+
+    }
+
+
+    .item:hover {
+
+      border-color: #999;
+
+    }
+
+
+    .item-top {
+
+      display: flex;
+
+      align-items: flex-start;
+
+      gap: 10px;
+
+    }
+
+
+    .item input[type="checkbox"] {
+
+      width: 19px;
+
+      height: 19px;
+
+      cursor: pointer;
+
+      flex-shrink: 0;
+
+    }
+
+
+    .item-name {
+
+      font-weight: bold;
+
+    }
+
+
+    .item-meta {
+
+      color: #777;
+
+      font-size: 13px;
+
+      margin-top: 4px;
+
+    }
+
+
+    .quantity-area {
+
+      display: none;
+
+      margin-top: 12px;
+
+    }
+
+
+    .quantity-area.visible {
+
+      display: block;
+
+    }
+
+
+    .quantity-area label {
+
+      display: block;
+
+      font-size: 13px;
+
+      font-weight: bold;
+
+      margin-bottom: 6px;
+
+    }
+
+
+    .quantity-input {
+
+      width: 100%;
+
+      padding: 11px;
+
+      border: 1px solid #ccc;
+
+      border-radius: 7px;
+
+      font-size: 15px;
+
+    }
+
+
+    /* BUTTONS */
+
+    button {
+
+      font-family: inherit;
+
+    }
+
+
+    .primary {
+
+      width: 100%;
+
+      margin-top: 20px;
+
+      padding: 14px;
+
+      border: none;
+
+      border-radius: 8px;
+
+      background: #111;
+
+      color: white;
+
+      font-weight: bold;
+
+      cursor: pointer;
+
+      font-size: 15px;
+
+    }
+
+
+    .primary:hover {
+
+      background: #2b2b2b;
+
+    }
+
+
+    .secondary {
+
+      width: 100%;
+
+      margin-top: 10px;
+
+      padding: 13px;
+
+      border: 1px solid #ccc;
+
+      border-radius: 8px;
+
+      background: white;
+
+      cursor: pointer;
+
+      font-weight: bold;
+
+    }
+
+
+    .secondary:hover {
+
+      background: #f0f0f0;
+
+    }
+
+
+    .danger {
+
+      width: 100%;
+
+      margin-top: 10px;
+
+      padding: 13px;
+
+      border: 1px solid #c62828;
+
+      border-radius: 8px;
+
+      background: white;
+
+      color: #c62828;
+
+      cursor: pointer;
+
+      font-weight: bold;
+
+    }
+
+
+    /* PURCHASE */
+
+    .purchase-toggle {
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 12px;
+
+      padding: 15px;
+
+      background: #f7f7f7;
+
+      border-radius: 9px;
+
+      cursor: pointer;
+
+    }
+
+
+    .purchase-toggle input {
+
+      width: 20px;
+
+      height: 20px;
+
+    }
+
+
+    #purchaseSection {
+
+      display: none;
+
+      margin-top: 20px;
+
+    }
+
+
+    #purchaseSection.visible {
+
+      display: block;
+
+    }
+
+
+    /* MODAL */
+
+    .modal {
+
+      position: fixed;
+
+      inset: 0;
+
+      background:
+        rgba(0,0,0,.55);
+
+      display: none;
+
+      align-items: center;
+
+      justify-content: center;
+
+      padding: 20px;
+
+      z-index: 1000;
+
+    }
+
+
+    .modal.visible {
+
+      display: flex;
+
+    }
+
+
+    .modal-box {
+
+      width: 100%;
+
+      max-width: 500px;
+
+      background: white;
+
+      border-radius: 13px;
+
+      padding: 25px;
+
+    }
+
+
+    .modal-box h2 {
+
+      margin-top: 0;
+
+    }
+
+
+    .form-group {
+
+      margin-bottom: 16px;
+
+    }
+
+
+    .form-group label {
+
+      display: block;
+
+      font-weight: bold;
+
+      margin-bottom: 7px;
+
+    }
+
+
+    .form-group input {
+
+      width: 100%;
+
+      padding: 12px;
+
+      border: 1px solid #ccc;
+
+      border-radius: 7px;
+
+      font-size: 15px;
+
+    }
+
+
+    /* STATUS */
+
+    .message {
+
+      display: none;
+
+      margin-top: 18px;
+
+      padding: 14px;
+
+      border-radius: 8px;
+
+      font-weight: bold;
+
+    }
+
+
+    .message.visible {
+
+      display: block;
+
+    }
+
+
+    .message.error {
+
+      background: #ffe7e7;
+
+      color: #b00020;
+
+      border: 1px solid #f1aaaa;
+
+    }
+
+
+    .message.success {
+
+      background: #e7f6e9;
+
+      color: #176b2b;
+
+      border: 1px solid #a8d9b2;
+
+    }
+
+
+    /* LOADING */
+
+    .loading {
+
+      background: white;
+
+      border-radius: 12px;
+
+      padding: 45px;
+
+      text-align: center;
+
+      margin-top: 18px;
+
+      font-weight: bold;
+
+    }
+
+
+    .hidden {
+
+      display: none !important;
+
+    }
+
+
+    /* MOBILE */
+
+    @media (max-width: 700px) {
+
+      .profile {
+
+        grid-template-columns: 1fr;
+
+      }
+
+      .item-grid {
+
+        grid-template-columns: 1fr;
+
+      }
+
+      .header {
+
+        align-items: flex-start;
+
+        flex-direction: column;
+
+      }
+
+    }
+
+  </style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+  <!-- HEADER -->
+
+  <div class="header">
+
+    <div>
+
+      <h1 id="companyTitle">
+        Automated Inventory Control System
+      </h1>
+
+      <p>
+        Daily Inventory Consumption & Purchase
+      </p>
+
+    </div>
+
+
+    <button
+      class="edit-button"
+      onclick="openEditModal()">
+
+      ✎ Edit
+
+    </button>
+
+  </div>
+
+
+  <!-- PROFILE -->
+
+  <div class="profile">
+
+    <div class="profile-box">
+
+      <div class="profile-label">
+        COMPANY
+      </div>
+
+      <div
+        class="profile-value"
+        id="companyName">
+
+        Loading...
+
+      </div>
+
+    </div>
+
+
+    <div class="profile-box">
+
+      <div class="profile-label">
+        USER
+      </div>
+
+      <div
+        class="profile-value"
+        id="userName">
+
+        Loading...
+
+      </div>
+
+    </div>
+
+
+    <div class="profile-box">
+
+      <div class="profile-label">
+        DATE
+      </div>
+
+      <div
+        class="profile-value"
+        id="reportDate">
+
+        Loading...
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- LOADING -->
+
+  <div
+    class="loading"
+    id="loading">
+
+    Loading Inventory...
+
+  </div>
+
+
+  <!-- MAIN APPLICATION -->
+
+  <div
+    id="application"
+    class="hidden">
+
+
+    <!-- CONSUMPTION -->
+
+    <div class="card">
+
+      <h2>
+        1. Inventory Used Today
+      </h2>
+
+      <p class="subtitle">
+
+        Select the items that were used today,
+        then enter the quantity used.
+
+      </p>
+
+
+      <div
+        class="item-grid"
+        id="consumptionItems">
+
+      </div>
+
+
+      <button
+        class="primary"
+        onclick="goToPurchases()">
+
+        Continue
+
+      </button>
+
+
+      <button
+        class="danger"
+        onclick="undoLastReport()">
+
+        ↶ Undo Last Submitted Report
+
+      </button>
+
+    </div>
+
+
+    <!-- PURCHASE -->
+
+    <div
+      class="card"
+      id="purchaseCard">
+
+
+      <h2>
+        2. Purchases Today
+      </h2>
+
+
+      <p class="subtitle">
+
+        If any inventory was purchased today,
+        enable the option below.
+
+      </p>
+
+
+      <label class="purchase-toggle">
+
+        <input
+          type="checkbox"
+          id="purchaseToggle"
+          onchange="togglePurchases()">
+
+        <span>
+          Inventory was purchased today
+        </span>
+
+      </label>
+
+
+      <div id="purchaseSection">
+
+        <p class="subtitle">
+
+          Select the purchased items and enter
+          the quantity purchased.
+
+        </p>
+
+
+        <div
+          class="item-grid"
+          id="purchaseItems">
+
+        </div>
+
+      </div>
+
+
+      <button
+        class="primary"
+        onclick="submitReport()">
+
+        Submit Daily Report
+
+      </button>
+
+
+      <button
+        class="secondary"
+        onclick="goBackToConsumption()">
+
+        ← Back to Inventory Used
+
+      </button>
+
+    </div>
+
+
+    <!-- MESSAGE -->
+
+    <div
+      id="message"
+      class="message">
+
+    </div>
+
+
+  </div>
+
+</div>
+
+
+<!-- EDIT MODAL -->
+
+<div
+  class="modal"
+  id="editModal">
+
+  <div class="modal-box">
+
+    <h2>
+      Edit Profile
+    </h2>
+
+    <p class="subtitle">
+
+      These details are saved for your Google
+      account and are used in the daily email report.
+
+    </p>
+
+
+    <div class="form-group">
+
+      <label>
+        Company Name
+      </label>
+
+      <input
+        type="text"
+        id="companyInput"
+        placeholder="Enter company name">
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label>
+        User Name
+      </label>
+
+      <input
+        type="text"
+        id="userInput"
+        placeholder="Enter your name">
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label>
+        Receipt Email
+      </label>
+
+      <input
+        type="email"
+        id="receiptEmailInput"
+        placeholder="Enter email address for receipt">
+
+    </div>
+
+
+    <button
+      class="primary"
+      onclick="saveProfile()">
+
+      Save
+
+    </button>
+
+
+    <button
+      class="secondary"
+      onclick="closeEditModal()">
+
+      Cancel
+
+    </button>
+
+  </div>
+
+</div>
+
+
+<script>
+
+
+/* =====================================================
+   GLOBAL DATA
+   ===================================================== */
+
+let inventoryItems = [];
+
+let currentProfile = {};
+
+
+/* =====================================================
+   INITIALIZE
+   ===================================================== */
+
+window.onload = function() {
+
+  loadInventory();
+
+};
+
+
+function loadInventory() {
+
+  google.script.run
+
+    .withSuccessHandler(function(data) {
+
+      document
+        .getElementById("loading")
+        .classList.add("hidden");
+
+
+      document
+        .getElementById("application")
+        .classList.remove("hidden");
+
+
+      inventoryItems =
+        data.items;
+
+
+      currentProfile = {
+
+        companyName:
+          data.companyName,
+
+        userName:
+          data.userName,
+
+        receiptEmail:
+          data.receiptEmail
+
+      };
+
+
+      updateProfileDisplay(data);
+
+      renderItems();
+
+    })
+
+
+    .withFailureHandler(function(error) {
+
+      showError(
+        error.message ||
+        "Unable to load inventory."
+      );
+
+      document
+        .getElementById("loading")
+        .innerText =
+        "Unable to load inventory.";
+
+    })
+
+
+    .getInitialData();
+
+}
+
+
+/* =====================================================
+   PROFILE
+   ===================================================== */
+
+function updateProfileDisplay(data) {
+
+  document
+    .getElementById("companyName")
+    .innerText =
+      data.companyName ||
+      "Not configured";
+
+
+  document
+    .getElementById("userName")
+    .innerText =
+      data.userName ||
+      "Not configured";
+
+
+  document
+    .getElementById("reportDate")
+    .innerText =
+      data.date;
+
+
+  document
+    .getElementById("companyTitle")
+    .innerText =
+      data.companyName ||
+      "Automated Inventory Control System";
+
+}
+
+
+function openEditModal() {
+
+  document
+    .getElementById("companyInput")
+    .value =
+      currentProfile.companyName ||
+      "";
+
+
+  document
+    .getElementById("userInput")
+    .value =
+      currentProfile.userName ||
+      "";
+
+
+  document
+    .getElementById("receiptEmailInput")
+    .value =
+      currentProfile.receiptEmail ||
+      "";
+
+
+  document
+    .getElementById("editModal")
+    .classList.add("visible");
+
+}
+
+
+function closeEditModal() {
+
+  document
+    .getElementById("editModal")
+    .classList.remove("visible");
+
+}
+
+
+function saveProfile() {
+
+  const company =
+    document
+      .getElementById("companyInput")
+      .value
+      .trim();
+
+
+  const user =
+    document
+      .getElementById("userInput")
+      .value
+      .trim();
+
+
+  const receiptEmail =
+    document
+      .getElementById("receiptEmailInput")
+      .value
+      .trim();
+
+
+  if (!company) {
+
+    alert(
+      "Please enter the company name."
+    );
+
+    return;
+
+  }
+
+
+  if (!user) {
+
+    alert(
+      "Please enter the user name."
+    );
+
+    return;
+
+  }
+
+
+  if (!receiptEmail) {
+
+    alert(
+      "Please enter the receipt email."
+    );
+
+    return;
+
+  }
+
+
+  if (
+    !/^[^\s@]+@[^\s@]+\.[^\s@]+$/
+      .test(receiptEmail)
+  ) {
+
+    alert(
+      "Please enter a valid email address."
+    );
+
+    return;
+
+  }
+
+
+  google.script.run
+
+    .withSuccessHandler(function(data) {
+
+      currentProfile.companyName =
+        data.companyName;
+
+      currentProfile.userName =
+        data.userName;
+
+      currentProfile.receiptEmail =
+        data.receiptEmail;
+
+
+      document
+        .getElementById("companyName")
+        .innerText =
+          data.companyName;
+
+
+      document
+        .getElementById("userName")
+        .innerText =
+          data.userName;
+
+
+      document
+        .getElementById("companyTitle")
+        .innerText =
+          data.companyName;
+
+
+      closeEditModal();
+
+
+      showSuccess(
+        "Profile updated successfully."
+      );
+
+    })
+
+
+    .withFailureHandler(function(error) {
+
+      showError(
+        error.message ||
+        "Unable to save profile."
+      );
+
+    })
+
+
+    .saveUserProfile(
+      company,
+      user,
+      receiptEmail
+    );
+
+}
+
+
+/* =====================================================
+   RENDER ITEMS
+   ===================================================== */
+
+function renderItems() {
+
+  const consumptionContainer =
+    document.getElementById(
+      "consumptionItems"
+    );
+
+
+  const purchaseContainer =
+    document.getElementById(
+      "purchaseItems"
+    );
+
+
+  consumptionContainer.innerHTML =
+    "";
+
+  purchaseContainer.innerHTML =
+    "";
+
+
+  inventoryItems.forEach(
+    function(item) {
+
+      consumptionContainer
+        .appendChild(
+          createItemElement(
+            item,
+            "consumption"
+          )
+        );
+
+
+      purchaseContainer
+        .appendChild(
+          createItemElement(
+            item,
+            "purchase"
+          )
+        );
+
+    }
+  );
+
+}
+
+
+/* =====================================================
+   CREATE ITEM
+   ===================================================== */
+
+function createItemElement(
+  item,
+  type
+) {
+
+  const wrapper =
+    document.createElement(
+      "div"
+    );
+
+
+  wrapper.className =
+    "item";
+
+
+  const checkboxId =
+    type +
+    "-checkbox-" +
+    item.rowNumber;
+
+
+  const quantityId =
+    type +
+    "-quantity-" +
+    item.rowNumber;
+
+
+  const status =
+    item.lowStock
+      ? "⚠ Low Stock"
+      : "Stock OK";
+
+
+  wrapper.innerHTML = `
+
+    <div class="item-top">
+
+      <input
+        type="checkbox"
+        id="${checkboxId}"
+        onchange="toggleQuantity(
+          '${type}',
+          ${item.rowNumber}
+        )">
+
+      <div>
+
+        <div class="item-name">
+          ${escapeHtml(item.itemName)}
+        </div>
+
+        <div class="item-meta">
+
+          ${escapeHtml(item.serialNumber)}
+          ·
+          ${escapeHtml(item.uom)}
+          ·
+          ${status}
+
+        </div>
+
+        <div class="item-meta">
+
+          Total Left:
+          <b>${item.totalLeft}</b>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div
+      class="quantity-area"
+      id="${type}-quantity-area-${item.rowNumber}">
+
+      <label>
+        Quantity
+      </label>
+
+      <input
+        class="quantity-input"
+        type="number"
+        min="0"
+        step="any"
+        id="${quantityId}"
+        placeholder="Enter quantity">
+
+    </div>
+
+  `;
+
+
+  return wrapper;
+
+}
+
+
+/* =====================================================
+   QUANTITY TOGGLE
+   ===================================================== */
+
+function toggleQuantity(
+  type,
+  rowNumber
+) {
+
+  const checkbox =
+    document.getElementById(
+      type +
+      "-checkbox-" +
+      rowNumber
+    );
+
+
+  const area =
+    document.getElementById(
+      type +
+      "-quantity-area-" +
+      rowNumber
+    );
+
+
+  if (
+    checkbox.checked
+  ) {
+
+    area.classList.add(
+      "visible"
+    );
+
+  } else {
+
+    area.classList.remove(
+      "visible"
+    );
+
+    document
+      .getElementById(
+        type +
+        "-quantity-" +
+        rowNumber
+      )
+      .value = "";
+
+  }
+
+}
+
+
+/* =====================================================
+   PURCHASE TOGGLE
+   ===================================================== */
+
+function togglePurchases() {
+
+  const checkbox =
+    document.getElementById(
+      "purchaseToggle"
+    );
+
+
+  const section =
+    document.getElementById(
+      "purchaseSection"
+    );
+
+
+  if (
+    checkbox.checked
+  ) {
+
+    section.classList.add(
+      "visible"
+    );
+
+  } else {
+
+    section.classList.remove(
+      "visible"
+    );
+
+  }
+
+}
+
+
+/* =====================================================
+   CONSUMPTION VALIDATION
+   ===================================================== */
+
+function collectConsumption() {
+
+  const entries = [];
+
+
+  inventoryItems.forEach(
+    function(item) {
+
+      const checkbox =
+        document.getElementById(
+          "consumption-checkbox-" +
+          item.rowNumber
+        );
+
+
+      if (
+        !checkbox.checked
+      ) {
+
+        return;
+
+      }
+
+
+      const quantity =
+        Number(
+          document
+            .getElementById(
+              "consumption-quantity-" +
+              item.rowNumber
+            )
+            .value
+        );
+
+
+      if (
+        !quantity ||
+        quantity <= 0
+      ) {
+
+        throw new Error(
+          "Please enter a valid quantity for " +
+          item.itemName
+        );
+
+      }
+
+
+      if (
+        quantity >
+        item.totalLeft
+      ) {
+
+        throw new Error(
+          item.itemName +
+          " only has " +
+          item.totalLeft +
+          " " +
+          item.uom +
+          " remaining."
+        );
+
+      }
+
+
+      entries.push({
+
+        rowNumber:
+          item.rowNumber,
+
+        quantity:
+          quantity
+
+      });
+
+    }
+  );
+
+
+  return entries;
+
+}
+
+
+/* =====================================================
+   PURCHASE VALIDATION
+   ===================================================== */
+
+function collectPurchases() {
+
+  const toggle =
+    document.getElementById(
+      "purchaseToggle"
+    );
+
+
+  if (
+    !toggle.checked
+  ) {
+
+    return [];
+
+  }
+
+
+  const entries = [];
+
+
+  inventoryItems.forEach(
+    function(item) {
+
+      const checkbox =
+        document.getElementById(
+          "purchase-checkbox-" +
+          item.rowNumber
+        );
+
+
+      if (
+        !checkbox.checked
+      ) {
+
+        return;
+
+      }
+
+
+      const quantity =
+        Number(
+          document
+            .getElementById(
+              "purchase-quantity-" +
+              item.rowNumber
+            )
+            .value
+        );
+
+
+      if (
+        !quantity ||
+        quantity <= 0
+      ) {
+
+        throw new Error(
+          "Please enter a valid purchased quantity for " +
+          item.itemName
+        );
+
+      }
+
+
+      entries.push({
+
+        rowNumber:
+          item.rowNumber,
+
+        quantity:
+          quantity
+
+      });
+
+    }
+  );
+
+
+  if (
+    entries.length === 0
+  ) {
+
+    throw new Error(
+      "You selected that inventory was purchased, " +
+      "but no purchased items were selected."
+    );
+
+  }
+
+
+  return entries;
+
+}
+
+
+/* =====================================================
+   NAVIGATION
+   ===================================================== */
+
+function goToPurchases() {
+
+  try {
+
+    collectConsumption();
+
+  } catch (error) {
+
+    showError(
+      error.message
+    );
+
+    return;
+
+  }
+
+
+  document
+    .getElementById(
+      "purchaseCard"
+    )
+    .scrollIntoView({
+      behavior: "smooth"
+    });
+
+}
+
+
+function goBackToConsumption() {
+
+  document
+    .getElementById(
+      "consumptionItems"
+    )
+    .scrollIntoView({
+      behavior: "smooth"
+    });
+
+}
+
+
+/* =====================================================
+   SUBMIT
+   ===================================================== */
+
+function submitReport() {
+
+  let consumption;
+
+  let purchases;
+
+
+  try {
+
+    consumption =
+      collectConsumption();
+
+    purchases =
+      collectPurchases();
+
+  } catch (error) {
+
+    showError(
+      error.message
+    );
+
+    return;
+
+  }
+
+
+  if (
+    consumption.length === 0 &&
+    purchases.length === 0
+  ) {
+
+    if (
+      !confirm(
+        "No inventory was marked as used or purchased today.\n\n" +
+        "Do you still want to submit the daily report?"
+      )
+    ) {
+
+      return;
+
+    }
+
+  }
+
+
+  const button =
+    document.querySelector(
+      "#purchaseCard .primary"
+    );
+
+
+  button.disabled =
+    true;
+
+  button.innerText =
+    "Submitting...";
+
+
+  clearMessage();
+
+
+  google.script.run
+
+    .withSuccessHandler(
+      function(result) {
+
+        button.disabled =
+          false;
+
+        button.innerText =
+          "Submit Daily Report";
+
+
+        inventoryItems =
+          result.items;
+
+
+        renderItems();
+
+
+        document
+          .getElementById(
+            "purchaseToggle"
+          )
+          .checked = false;
+
+
+        document
+          .getElementById(
+            "purchaseSection"
+          )
+          .classList.remove(
+            "visible"
+          );
+
+
+        showSuccess(
+
+          "Report submitted successfully. " +
+
+          "The inventory has been updated and " +
+
+          "the email has been sent to " +
+
+          result.email +
+          "."
+
+        );
+
+
+        window.scrollTo({
+
+          top: 0,
+
+          behavior: "smooth"
+
+        });
+
+      }
+    )
+
+
+    .withFailureHandler(
+      function(error) {
+
+        button.disabled =
+          false;
+
+        button.innerText =
+          "Submit Daily Report";
+
+
+        showError(
+          error.message ||
+          "Unable to submit report."
+        );
+
+      }
+    )
+
+
+    .submitDailyReport(
+      consumption,
+      purchases
+    );
+
+}
+
+
+/* =====================================================
+   UNDO
+   ===================================================== */
+
+function undoLastReport() {
+
+  if (
+    !confirm(
+      "Undo the last submitted inventory report?\n\n" +
+      "This will reverse the inventory changes " +
+      "made by the last submission."
+    )
+  ) {
+
+    return;
+
+  }
+
+
+  google.script.run
+
+    .withSuccessHandler(
+      function(result) {
+
+        inventoryItems =
+          result.items;
+
+
+        renderItems();
+
+
+        showSuccess(
+          result.message
+        );
+
+
+        window.scrollTo({
+
+          top: 0,
+
+          behavior: "smooth"
+
+        });
+
+      }
+    )
+
+
+    .withFailureHandler(
+      function(error) {
+
+        showError(
+          error.message ||
+          "Unable to undo the report."
+        );
+
+      }
+    )
+
+
+    .undoLastReport();
+
+}
+
+
+/* =====================================================
+   MESSAGES
+   ===================================================== */
+
+function showError(message) {
+
+  const box =
+    document.getElementById(
+      "message"
+    );
+
+
+  box.className =
+    "message error visible";
+
+
+  box.innerText =
+    "Error: " +
+    message;
+
+
+  box.scrollIntoView({
+    behavior: "smooth"
+  });
+
+}
+
+
+function showSuccess(message) {
+
+  const box =
+    document.getElementById(
+      "message"
+    );
+
+
+  box.className =
+    "message success visible";
+
+
+  box.innerText =
+    message;
+
+}
+
+
+function clearMessage() {
+
+  const box =
+    document.getElementById(
+      "message"
+    );
+
+
+  box.className =
+    "message";
+
+
+  box.innerText =
+    "";
+
+}
+
+
+/* =====================================================
+   HTML ESCAPING
+   ===================================================== */
+
+function escapeHtml(value) {
+
+  return String(
+    value || ""
+  )
+
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+
+    .replace(
+      /</g,
+      "&lt;"
+    )
+
+    .replace(
+      />/g,
+      "&gt;"
+    )
+
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+
+    .replace(
+      /'/g,
+      "&#039;"
+    );
+
+}
+
+
+</script>
+
+
+</body>
+
+</html>
