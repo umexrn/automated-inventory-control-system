@@ -1,1 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Automated Inventory Control System</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
+  <header class="topbar">
+    <h1>Automated Inventory Control System</h1>
+    <div class="actions">
+      <button id="btnAddItem" class="btn btn-primary">+ Add Item</button>
+      <button id="btnRecordUsage" class="btn btn-secondary">Record Usage</button>
+      <button id="btnExport" class="btn btn-ghost">Export</button>
+      <button id="btnImport" class="btn btn-ghost">Import</button>
+      <input type="file" id="importFile" accept=".json" hidden>
+    </div>
+  </header>
+
+  <section class="stats">
+    <div class="stat-card">
+      <span class="stat-label">Total Items</span>
+      <span class="stat-value" id="statTotalItems">0</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-label">Total Stock</span>
+      <span class="stat-value" id="statTotalStock">0</span>
+    </div>
+    <div class="stat-card stat-warning">
+      <span class="stat-label">Low Stock</span>
+      <span class="stat-value" id="statLowStock">0</span>
+    </div>
+    <div class="stat-card stat-danger">
+      <span class="stat-label">Out of Stock</span>
+      <span class="stat-value" id="statOutOfStock">0</span>
+    </div>
+  </section>
+
+  <section class="controls">
+    <input type="text" id="searchInput" placeholder="Search items...">
+    <select id="filterSelect">
+      <option value="all">All</option>
+      <option value="in-stock">In Stock</option>
+      <option value="low-stock">Low Stock</option>
+      <option value="out-of-stock">Out of Stock</option>
+    </select>
+  </section>
+
+  <section class="table-wrapper">
+    <table id="inventoryTable">
+      <thead>
+        <tr>
+          <th>Item Name</th>
+          <th>Current</th>
+          <th>Used</th>
+          <th>Unit</th>
+          <th>Min. Stock</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="inventoryTableBody">
+        <!-- rows injected by JS -->
+      </tbody>
+    </table>
+  </section>
+
+  <dialog id="addItemModal">
+    <form id="addItemForm" method="dialog">
+      <h2>Add Inventory Item</h2>
+
+      <label>Item Name
+        <input type="text" id="fName" required>
+      </label>
+
+      <label>Initial Quantity
+        <input type="number" id="fQty" min="0" step="any" required>
+      </label>
+
+      <label>Unit
+        <input type="text" id="fUnit" placeholder="kg, pcs, L..." required>
+      </label>
+
+      <label>SKU / Serial Number
+        <input type="text" id="fSku">
+      </label>
+
+      <label>Minimum Stock Level
+        <input type="number" id="fMinStock" min="0" step="any" required>
+      </label>
+
+      <label>Purchase Date
+        <input type="date" id="fPurchaseDate">
+      </label>
+
+      <div class="modal-actions">
+        <button type="button" id="btnCancelAdd" class="btn btn-ghost">Cancel</button>
+        <button type="submit" id="btnSaveItem" class="btn btn-primary">Save Item</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="usageModal">
+    <form id="usageForm" method="dialog">
+      <h2>Record Usage</h2>
+
+      <label>Select Item
+        <select id="uItemSelect" required></select>
+      </label>
+
+      <label>Quantity Used
+        <input type="number" id="uQty" min="0" step="any" required>
+      </label>
+
+      <p id="uCurrentQtyHint" class="hint"></p>
+
+      <div class="modal-actions">
+        <button type="button" id="btnCancelUsage" class="btn btn-ghost">Cancel</button>
+        <button type="submit" id="btnSaveUsage" class="btn btn-primary">Record</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="script.js"></script>
+</body>
+</html>
